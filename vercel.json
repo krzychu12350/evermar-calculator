@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "functions": {
+    "api/*.php": {
+      "runtime": "vercel-php@0.6.2",
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/"
+    },
+    {
+      "src": "/android/(.*)",
+      "dest": "/public/android/"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/"
+    },
+    {
+      "src": "/build/(.*)",
+      "dest": "/public/build/"
+    },
+    {
+      "src": "/(.*).png",
+      "dest": "/public/$1.png"
+    },
+    {
+      "src": "/(.*).mp3",
+      "dest": "/public/$1.mp3"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ],
+  "env": {
+    "APP_NAME": "Evermar Kalkulator",
+    "APP_ENV": "production",
+    "APP_DEBUG": "true",
+    "APP_URL": "https://evermar-calculator.vercel.app",
+    "APP_KEY": "base64:k3Q2obqeux9Kz/Z6u4FDuPmRNjW17zt2R5WfQ2ojOjY=",
+
+    "APP_CONFIG_CACHE": "/tmp/config.php",
+    "APP_EVENTS_CACHE": "/tmp/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/services.php",
+    "VIEW_COMPILED_PATH": "/tmp",
+
+    "DB_CONNECTION": "pgsql",
+    "DB_HOST": "ep-sparkling-bonus-ad9emkuo-pooler.c-2.us-east-1.aws.neon.tech",
+    "DB_PORT": "5432",
+    "DB_DATABASE": "neondb",
+    "DB_USERNAME": "neondb_owner",
+    "DB_PASSWORD": "npg_vWyfaV6rTsR7",
+
+    "CACHE_DRIVER": "array",
+    "LOG_CHANNEL": "stderr",
+    "SESSION_DRIVER": "cookie"
+  }
+}

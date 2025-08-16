@@ -17,4 +17,9 @@ class HomeController extends Controller
             'variants' => $variants
         ]);
     }
+
+    public function caculate(Request $request)
+    {
+
+    }
 }

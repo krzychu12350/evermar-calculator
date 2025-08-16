@@ -45,16 +45,16 @@ const groundCosts = {
 let debounceTimer = null
 
 // watchujemy wszystkie pola formularza
-watch(
-    installationForm,
-    () => {
-      clearTimeout(debounceTimer)
-      debounceTimer = setTimeout(() => {
-        handleSubmit()
-      }, 5000) // 5 sekund
-    },
-    { deep: true } // bardzo ważne, żeby wykryło zmiany w obiekcie
-)
+// watch(
+//     installationForm,
+//     () => {
+//       clearTimeout(debounceTimer)
+//       debounceTimer = setTimeout(() => {
+//         handleSubmit()
+//       }, 5000) // 5 sekund
+//     },
+//     { deep: true } // bardzo ważne, żeby wykryło zmiany w obiekcie
+// )
 </script>
 
 <template>
@@ -143,7 +143,7 @@ watch(
   <div v-if="totalFromBackend !== null" class="mt-4 p-4 bg-gray-100 rounded text-center">
     <h3 class="text-lg font-semibold mb-2 text-gray-700">Całkowity koszt instalacji:</h3>
 <!--    <p class="text-2xl font-bold text-green-600">{{ totalFromBackend }} zł</p>-->
-    <vue3-autocounter class="text-2xl font-bold text-green-600" ref='counter' :startAmount='0' :endAmount='totalFromBackend' :duration='0.5'  suffix=' zł' separator='' decimalSeparator='.' :decimals='2' :autoinit='true' />
+    <vue3-autocounter class="text-2xl font-bold text-green-600" ref='counter' :startAmount='0' :endAmount='totalFromBackend' :duration='1'  suffix=' zł' separator='' decimalSeparator='.' :decimals='2' :autoinit='true' />
   </div>
 
 

@@ -58,6 +58,14 @@ let debounceTimer = null
 </script>
 
 <template>
+  <!-- Wyświetlenie wyniku z backendu -->
+  <div v-if="totalFromBackend !== null" class="mt-4 mb-4 p-4 bg-gray-100 rounded text-center">
+    <h3 class="text-lg font-semibold mb-2 text-gray-700">Całkowity koszt instalacji:</h3>
+    <!--    <p class="text-2xl font-bold text-green-600">{{ totalFromBackend }} zł</p>-->
+    <vue3-autocounter class="text-2xl font-bold text-green-600" ref='counter' :startAmount='0' :endAmount='totalFromBackend' :duration='1'  suffix=' zł' separator='' decimalSeparator='.' :decimals='2' :autoinit='true' />
+  </div>
+
+
   <div class="installation-form max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
     <h2 class="text-2xl font-semibold mb-4 text-gray-800">Oblicz koszt instalacji</h2>
 
@@ -138,12 +146,6 @@ let debounceTimer = null
 <!--    <button class="w-full mt-2 bg-gray-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-600 transition-colors" @click="handleSubmit">-->
 <!--      Submit Programmatically-->
 <!--    </button>-->
-  </div>
-  <!-- Wyświetlenie wyniku z backendu -->
-  <div v-if="totalFromBackend !== null" class="mt-4 p-4 bg-gray-100 rounded text-center">
-    <h3 class="text-lg font-semibold mb-2 text-gray-700">Całkowity koszt instalacji:</h3>
-<!--    <p class="text-2xl font-bold text-green-600">{{ totalFromBackend }} zł</p>-->
-    <vue3-autocounter class="text-2xl font-bold text-green-600" ref='counter' :startAmount='0' :endAmount='totalFromBackend' :duration='1'  suffix=' zł' separator='' decimalSeparator='.' :decimals='2' :autoinit='true' />
   </div>
 
 

@@ -15,7 +15,7 @@ class AccessController extends Controller
             'password' => 'required|string',
         ]);
 
-        $key = Str::lower($request->ip()).'|password-attempt'; // unique key per IP
+        //$key = Str::lower($request->ip()).'|password-attempt'; // unique key per IP
 
         // Check if the user exceeded 5 attempts per hour
 //        if (RateLimiter::tooManyAttempts($key, 5)) {
@@ -35,14 +35,14 @@ class AccessController extends Controller
 
         if ($request->password === 'Evermar12?3') {
             // Reset attempts on success
-            RateLimiter::clear($key);
+            //RateLimiter::clear($key);
 
             $request->session()->put('access_granted', true);
             return redirect()->route('home'); // redirect to Home page
         }
 
         // Increment failed attempts
-        RateLimiter::hit($key, 3600); // lockout lasts 1 hour
+        //RateLimiter::hit($key, 3600); // lockout lasts 1 hour
 
         return back()->withErrors([
             'password' => 'Niepoprawne hasło!'

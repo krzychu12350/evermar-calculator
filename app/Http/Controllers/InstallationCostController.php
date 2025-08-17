@@ -31,6 +31,7 @@ class InstallationCostController extends Controller
         // 1️⃣ Koszt paneli
         $panelVariantPrice = PanelVariantPrice::where('model', $this->panelName($panelType))
             ->where('install_type', $installationType === 'string' ? 'string' : 'with_storage')
+            ->whereRelation('variant', 'panel_count', $panelCount)
             ->first();
 
         $panelPrice = $panelVariantPrice->price_per_panel ?? 0;
@@ -73,7 +74,7 @@ class InstallationCostController extends Controller
 
             if ($additionalInverterKW > 0) {
                 $invoiceItems[] = [
-                    'name' => "Dodatkowy inwerter",
+                    'name' => "Dodatkowa moc inwertera",
                     'quantity' => $additionalInverterKW . " kW",
                     'unit_price' => 200,
                     'total' => $additionalInverterTotal,
@@ -96,7 +97,13 @@ class InstallationCostController extends Controller
 
         // 5️⃣ Magazyn
         if ($installationType === 'storage' && $storageCapacity > 0) {
-            $storagePrice = StorageVariantPrice::where('capacity_kwh', $storageCapacity)->first()->price ?? 0;
+            $storageVariant = StorageVariantPrice::whereRelation('variant', 'panel_count', $panelCount)
+                ->where('capacity_kwh', '<=', $storageCapacity)
+                ->orderByDesc('capacity_kwh')
+                ->first();
+
+            $baseCapacity = $storageVariant->capacity_kwh ?? 0;
+            $storagePrice = $storageVariant->price ?? 0;
             $total += $storagePrice;
 
             $invoiceItems[] = [
@@ -106,9 +113,9 @@ class InstallationCostController extends Controller
                 'total' => $storagePrice,
             ];
 
-            // Dopłata za dodatkową pojemność >15kWh
-            if ($storageCapacity + $extraStorage > 15) {
-                $extraKw = max(0, $storageCapacity + $extraStorage - 15);
+            // Dopłata za nadwyżkę powyżej największego wariantu
+            $extraKw = max(0, $storageCapacity - $baseCapacity);
+            if ($extraKw > 0) {
                 $extraStorageTotal = 4000 * ceil($extraKw / 5);
                 $total += $extraStorageTotal;
 

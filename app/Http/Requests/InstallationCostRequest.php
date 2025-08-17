@@ -17,8 +17,9 @@ class InstallationCostRequest extends FormRequest
             'installationType' => 'required|in:string,storage',
             'panelCount' => 'required|integer|min:1',
             'panelType' => 'required|in:tongwei,jasolar',
-            'storageCapacity' => 'nullable|integer|in:0,5,10,15,20',
+            'storageCapacity' => 'nullable|integer|in:0,5,10,15,20,25,30,40,45,50',
             'hybridInverter' => 'boolean',
+            'inverterSelected' => 'boolean',
             'groundInstallation' => 'nullable|in:grunt,ekierka,gont,dachowka,rąbek',
             'additionalInverterKW' => 'nullable|integer|min:0',
             'backup' => 'boolean',
@@ -36,9 +37,22 @@ class InstallationCostRequest extends FormRequest
             'panelType.required' => 'Wybierz typ paneli.',
             'storageCapacity.in' => 'Nieprawidłowa pojemność magazynu.',
             'hybridInverter.boolean' => 'Nieprawidłowa wartość dla inwertera hybrydowego.',
+            'inverterSelected.boolean' => 'Nieprawidłowa wartość dla inwertera.',
             'groundInstallation.in' => 'Nieprawidłowy typ montażu.',
             'additionalInverterKW.min' => 'Dodatkowa moc inwertera nie może być ujemna.',
             'extraStorage.min' => 'Dodatkowa pojemność magazynu nie może być ujemna.',
         ];
+    }
+
+    /**
+     * Prepare data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('installationType') === 'storage') {
+            $this->merge([
+                'inverterSelected' => true, // always true for storage
+            ]);
+        }
     }
 }

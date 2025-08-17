@@ -22,4 +22,7 @@ createInertiaApp({
             .component('vue3-autocounter', Vue3Autocounter)
             .mount(el)
     },
+    progress: {
+        color: '#00a63e'
+    },
 })

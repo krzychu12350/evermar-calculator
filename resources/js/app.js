@@ -3,7 +3,7 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { ZiggyVue } from 'ziggy-js'
 import Vue3Autocounter from 'vue3-autocounter';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Evermar Calculator';
+const appName = 'Evermar Calculator';
 
 createInertiaApp({
     title: (title) => `${appName}`,

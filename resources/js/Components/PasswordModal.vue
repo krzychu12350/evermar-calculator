@@ -49,7 +49,7 @@
       <div class="flex justify-end space-x-2">
         <button
             @click="submitPassword"
-            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 cursor-pointer"
         >
           Sprawdź
         </button>

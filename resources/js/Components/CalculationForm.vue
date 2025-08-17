@@ -211,7 +211,7 @@ const resultsDiv = ref(null);
           <button
               type="button"
               @click="showInverterField = !showInverterField"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700"
+              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
           >
             {{ showInverterField ? '−' : '+' }}
           </button>
@@ -223,7 +223,7 @@ const resultsDiv = ref(null);
           <button
               type="button"
               @click="showStorageField = !showStorageField"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700"
+              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
           >
             {{ showStorageField ? '−' : '+' }}
           </button>

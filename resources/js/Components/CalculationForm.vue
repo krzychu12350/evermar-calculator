@@ -59,8 +59,19 @@ watch(
     () => installationForm.inverterSelected,
     (newVal) => {
       installationForm.hybridInverter = newVal;
+      // additionalInverterKW.value = 0;
     }
 )
+
+// Reset additionalInverterKW when inverter field hidden OR inverter deselected
+watch(
+    [showInverterField, () => installationForm.inverterSelected],
+    ([newShowInverterField, newInverterSelected]) => {
+      if (!newShowInverterField || newInverterSelected === false) {
+        installationForm.additionalInverterKW = 0;
+      }
+    }
+);
 
 // Watch installation type to set default storageCapacity
 watch(
@@ -218,17 +229,7 @@ const resultsDiv = ref(null);
           <span class="text-gray-700 font-medium">Dodaj inwerter</span>
         </div>
 
-        <!-- Storage toggle -->
-        <div class="flex items-center space-x-2">
-          <button
-              type="button"
-              @click="showStorageField = !showStorageField"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
-          >
-            {{ showStorageField ? '−' : '+' }}
-          </button>
-          <span class="text-gray-700 font-medium">Dodaj magazyn</span>
-        </div>
+
       </div>
 
       <!-- Inverter selection -->
@@ -258,6 +259,20 @@ const resultsDiv = ref(null);
         />
       </div>
 
+
+      <div v-if="installationForm.installationType === 'string'" class="mb-4 space-y-4">
+        <!-- Storage toggle -->
+        <div class="flex items-center space-x-2">
+          <button
+              type="button"
+              @click="showStorageField = !showStorageField"
+              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
+          >
+            {{ showStorageField ? '−' : '+' }}
+          </button>
+          <span class="text-gray-700 font-medium">Dodaj magazyn</span>
+        </div>
+      </div>
 
       <!-- Storage selection -->
       <div v-if="showStorageField || installationForm.installationType === 'storage'" class="mb-4">

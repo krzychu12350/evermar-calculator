@@ -96,7 +96,7 @@ class InstallationCostController extends Controller
         }
 
         // 5️⃣ Magazyn
-        if ($installationType === 'storage' && $storageCapacity > 0) {
+        if ($storageCapacity > 0) {
             $storageVariant = StorageVariantPrice::whereRelation('variant', 'panel_count', $panelCount)
                 ->where('capacity_kwh', '<=', $storageCapacity)
                 ->orderByDesc('capacity_kwh')

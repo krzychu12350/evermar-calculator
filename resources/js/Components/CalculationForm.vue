@@ -138,7 +138,7 @@ let debounceTimer = null
         <label for="proJoy" class="text-gray-700 font-medium">Pro Joy (+1250 zł)</label>
       </div>
 
-      <button type="submit" class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700">
+      <button type="submit" class="w-full cursor-pointer bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700">
         Oblicz koszt
       </button>
     </form>

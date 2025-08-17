@@ -18,20 +18,20 @@ class AccessController extends Controller
         $key = Str::lower($request->ip()).'|password-attempt'; // unique key per IP
 
         // Check if the user exceeded 5 attempts per hour
-//        if (RateLimiter::tooManyAttempts($key, 5)) {
-//            $seconds = RateLimiter::availableIn($key);
-//
-//            $minutes = floor($seconds / 60);
-//            $remainingSeconds = $seconds % 60;
-//
-//            $timeMessage = $minutes > 0
-//                ? "{$minutes} minut" . ($remainingSeconds > 0 ? " i {$remainingSeconds} sekund" : "")
-//                : "{$remainingSeconds} sekund";
-//
-//            return back()->withErrors([
-//                'password' => "Za dużo prób. Spróbuj ponownie za {$timeMessage}."
-//            ]);
-//        }
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            $minutes = floor($seconds / 60);
+            $remainingSeconds = $seconds % 60;
+
+            $timeMessage = $minutes > 0
+                ? "{$minutes} minut" . ($remainingSeconds > 0 ? " i {$remainingSeconds} sekund" : "")
+                : "{$remainingSeconds} sekund";
+
+            return back()->withErrors([
+                'password' => "Za dużo prób. Spróbuj ponownie za {$timeMessage}."
+            ]);
+        }
 
         if ($request->password === 'Evermar12?3') {
             // Reset attempts on success

@@ -17,7 +17,7 @@ class InstallationCostRequest extends FormRequest
             'installationType' => 'required|in:string,storage',
             'panelCount' => 'required|integer|min:1',
             'panelType' => 'required|in:tongwei,jasolar',
-            'storageCapacity' => 'nullable|integer|in:0,5,10,15,20,25,30,40,45,50',
+            'storageCapacity' => 'nullable|integer|in:0,5,10,15,20,25,30,35,40,45,50',
             'hybridInverter' => 'boolean',
             'inverterSelected' => 'boolean',
             'groundInstallation' => 'nullable|in:grunt,ekierka,gont,dachowka,rąbek',
@@ -25,6 +25,8 @@ class InstallationCostRequest extends FormRequest
             'backup' => 'boolean',
             'proJoy' => 'boolean',
             'extraStorage' => 'nullable|integer|min:0',
+            'marginPercent' => 'required|numeric|min:0|max:100',
+            'taxType' => 'required|in:private,company',
         ];
     }
 
@@ -41,6 +43,12 @@ class InstallationCostRequest extends FormRequest
             'groundInstallation.in' => 'Nieprawidłowy typ montażu.',
             'additionalInverterKW.min' => 'Dodatkowa moc inwertera nie może być ujemna.',
             'extraStorage.min' => 'Dodatkowa pojemność magazynu nie może być ujemna.',
+            'marginPercent.required' => 'Podaj procent marży.',
+            'marginPercent.numeric' => 'Marża musi być liczbą.',
+            'marginPercent.min' => 'Marża nie może być ujemna.',
+            'marginPercent.max' => 'Marża nie może być większa niż 100%.',
+            'taxType.required' => 'Wybierz rodzaj podatku.',
+            'taxType.in' => 'Nieprawidłowy rodzaj podatku. Dozwolone: vat, netto, brutto.',
         ];
     }
 

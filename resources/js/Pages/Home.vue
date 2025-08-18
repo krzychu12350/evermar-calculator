@@ -15,5 +15,5 @@ import CalculationForm from "@/Components/CalculationForm.vue";
 import PasswordModal from "@/Components/PasswordModal.vue";
 import { ref } from "vue";
 
-const authenticated = ref(false);
+const authenticated = ref(true);
 </script>

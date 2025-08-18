@@ -25,6 +25,10 @@ class InstallationCostController extends Controller
         $proJoy = $data['proJoy'] ?? false;
         $extraStorage = $data['extraStorage'] ?? 0;
 
+        $marginPercent = $data['marginPercent'] ?? 0; // from frontend slider
+        $taxType = $data['taxType'] ?? 'private'; // 'private' => 8%, 'business' => 23%
+        $taxRate = $taxType === 'private' ? 0.08 : 0.23;
+
         $total = 0;
         $invoiceItems = [];
 
@@ -84,7 +88,7 @@ class InstallationCostController extends Controller
 
         // 4️⃣ Hybrydowy inwerter
         if ($hybridInverter || $installationType === 'storage') {
-            $inverterPrice = (int) InverterVariantPrice::first()->price ?? 0;
+            $inverterPrice = (int)InverterVariantPrice::first()->price ?? 0;
             $total += $inverterPrice;
 
             $invoiceItems[] = [
@@ -150,9 +154,22 @@ class InstallationCostController extends Controller
             ];
         }
 
+        // --- MARGIN & VAT CALCULATION ---
+        // 🔹 Apply margin
+        $marginAmount = $total * ($marginPercent / 100);
+        $totalNettoWithMargin = $total + $marginAmount;
+
+        // 🔹 VAT
+        $totalBruttoWithMargin = $totalNettoWithMargin * (1 + $taxRate);
+
         return Inertia::render('Home', [
             'total' => $total,
             'invoiceItems' => $invoiceItems, // return detailed invoice
+            'summary' => [
+                'marginAmount' => $marginAmount,
+                'totalNettoWithMargin' => $totalNettoWithMargin,
+                'totalBruttoWithMargin' => $totalBruttoWithMargin,
+            ]
         ]);
     }
 

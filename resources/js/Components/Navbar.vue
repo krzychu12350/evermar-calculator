@@ -1,75 +1,179 @@
 <template>
-  <Disclosure as="nav" class="relative bg-white" v-slot="{ open }">
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-      <div class="relative flex h-24 items-center justify-between">
-<!--        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">-->
-<!--          &lt;!&ndash; Mobile menu button&ndash;&gt;-->
-<!--          <DisclosureButton class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">-->
-<!--            <span class="absolute -inset-0.5" />-->
-<!--            <span class="sr-only">Open main menu</span>-->
-<!--            <Bars3Icon v-if="!open" class="block size-6" aria-hidden="true" />-->
-<!--            <XMarkIcon v-else class="block size-6" aria-hidden="true" />-->
-<!--          </DisclosureButton>-->
-<!--        </div>-->
-        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-          <div class=" flex shrink-0 items-center">
-            <img class="h-24 w-auto" src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png" alt="Your Company" />
+  <Disclosure as="nav" class="bg-white shadow" v-slot="{ open }">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+      <div class="flex justify-between h-20">
+        <div class="flex px-2 lg:px-0">
+          <div class="flex-shrink-0 flex items-center">
+            <img class="block lg:hidden h-16 w-auto" src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png" alt="Workflow" />
+            <img class="hidden lg:block h-20 w-auto" src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png" alt="Workflow" />
           </div>
-<!--          <div class="hidden sm:ml-6 sm:block">-->
-<!--            <div class="flex space-x-4">-->
-<!--              <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>-->
+          <div class="hidden lg:ml-6 lg:flex lg:items-center lg:space-x-8">
+            <!-- Current: "border-green-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+<!--            <a href="#" class="bg-green-50 border-green-500 border-green-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"> Kalkulator </a>-->
+<!--            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"> Panele </a>-->
+<!--            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"> Ceny </a>-->
+<!--            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"> Calendar </a>-->
+
+            <Link
+                v-for="item in navigation"
+                :key="item.name"
+                :href="item.href"
+                :class="[
+      item.current
+        ? 'bg-green-100 border-green-500 text-green-700 '
+        : 'text-gray-600 hover:bg-green-100',
+      'rounded-md px-3 py-2 text-sm font-medium inline-flex items-center px-4 py-2'
+    ]"
+                :aria-current="item.current ? 'page' : undefined"
+            >
+              {{ item.name }}
+            </Link>
+          </div>
+        </div>
+<!--        <div class="flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-end">-->
+<!--          <div class="max-w-lg w-full lg:max-w-xs">-->
+<!--            <label for="search" class="sr-only">Search</label>-->
+<!--            <div class="relative">-->
+<!--              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">-->
+<!--                <DocumentMagnifyingGlassIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />-->
+<!--              </div>-->
+<!--              <input id="search" name="search" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Search" type="search" />-->
 <!--            </div>-->
 <!--          </div>-->
+<!--        </div>-->
+        <div class="flex items-center lg:hidden">
+          <!-- Mobile menu button -->
+          <DisclosureButton class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500">
+            <span class="sr-only">Open main menu</span>
+            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+          </DisclosureButton>
         </div>
-        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-<!--          <button type="button" class="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">-->
-<!--            <span class="absolute -inset-1.5" />-->
+<!--        <div class="hidden lg:ml-4 lg:flex lg:items-center">-->
+<!--          <button type="button" class="flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">-->
 <!--            <span class="sr-only">View notifications</span>-->
-<!--            <BellIcon class="size-6" aria-hidden="true" />-->
+<!--            <BellIcon class="h-6 w-6" aria-hidden="true" />-->
 <!--          </button>-->
 
-          <!-- Profile dropdown -->
-<!--          <Menu as="div" class="relative ml-3">-->
-<!--            <MenuButton class="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">-->
-<!--              <span class="absolute -inset-1.5" />-->
-<!--              <span class="sr-only">Open user menu</span>-->
-<!--              <img class="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />-->
-<!--            </MenuButton>-->
-
-<!--            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">-->
-<!--              <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5">-->
+<!--          &lt;!&ndash; Profile dropdown &ndash;&gt;-->
+<!--          <Menu as="div" class="ml-4 relative flex-shrink-0">-->
+<!--            <div>-->
+<!--              <MenuButton class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">-->
+<!--                <span class="sr-only">Open user menu</span>-->
+<!--                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />-->
+<!--              </MenuButton>-->
+<!--            </div>-->
+<!--            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">-->
+<!--              <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">-->
 <!--                <MenuItem v-slot="{ active }">-->
-<!--                  <a href="#" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Your profile</a>-->
+<!--                  <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your Profile</a>-->
 <!--                </MenuItem>-->
 <!--                <MenuItem v-slot="{ active }">-->
-<!--                  <a href="#" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>-->
+<!--                  <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Settings</a>-->
 <!--                </MenuItem>-->
 <!--                <MenuItem v-slot="{ active }">-->
-<!--                  <a href="#" :class="[active ? 'bg-gray-100 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>-->
+<!--                  <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>-->
 <!--                </MenuItem>-->
 <!--              </MenuItems>-->
 <!--            </transition>-->
 <!--          </Menu>-->
-        </div>
+<!--        </div>-->
       </div>
     </div>
 
-<!--    <DisclosurePanel class="sm:hidden">-->
-<!--      <div class="space-y-1 px-2 pt-2 pb-3">-->
-<!--        <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>-->
+    <DisclosurePanel class="lg:hidden">
+      <div class="pt-2 pb-3 space-y-1">
+        <!-- Current: "bg-green-50 border-green-500 text-green-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" -->
+<!--        <DisclosureButton as="a" href="#" class="bg-green-50 border-green-500 text-green-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Dashboard</DisclosureButton>-->
+<!--        <DisclosureButton as="a" href="#" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Team</DisclosureButton>-->
+<!--        <DisclosureButton as="a" href="#" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Projects</DisclosureButton>-->
+<!--        <DisclosureButton as="a" href="#" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Calendar</DisclosureButton>-->
+        <DisclosureButton
+            v-for="item in navigation"
+            :key="item.name"
+            as="a"
+            :href="item.href"
+            :class="[
+        item.current
+          ? 'bg-green-50 border-green-500 text-green-700'
+          : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+        'block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
+      ]"
+            :aria-current="item.current ? 'page' : undefined"
+        >
+          {{ item.name }}
+        </DisclosureButton>
+
+      </div>
+<!--      <div class="pt-4 pb-3 border-t border-gray-200">-->
+<!--        <div class="flex items-center px-4">-->
+<!--          <div class="flex-shrink-0">-->
+<!--            <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />-->
+<!--          </div>-->
+<!--          <div class="ml-3">-->
+<!--            <div class="text-base font-medium text-gray-800">Tom Cook</div>-->
+<!--            <div class="text-sm font-medium text-gray-500">tom@example.com</div>-->
+<!--          </div>-->
+<!--          <button type="button" class="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">-->
+<!--            <span class="sr-only">View notifications</span>-->
+<!--            <BellIcon class="h-6 w-6" aria-hidden="true" />-->
+<!--          </button>-->
+<!--        </div>-->
+<!--        <div class="mt-3 space-y-1">-->
+<!--          <DisclosureButton as="a" href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Your Profile</DisclosureButton>-->
+<!--          <DisclosureButton as="a" href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Settings</DisclosureButton>-->
+<!--          <DisclosureButton as="a" href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Sign out</DisclosureButton>-->
+<!--        </div>-->
 <!--      </div>-->
-<!--    </DisclosurePanel>-->
+    </DisclosurePanel>
   </Disclosure>
 </template>
 
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { DocumentMagnifyingGlassIcon } from '@heroicons/vue/24/solid'
+import { BellIcon, Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import {  ref, watchEffect } from "vue";
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+import { usePage, Link } from "@inertiajs/vue3";
+
+
+const navigation = ref([
+  { name: 'Kalkulator', href: '/', current: false },
+  { name: 'Panele', href: '/panels', current: false },
+  { name: 'Warianty', href: '/variants', current: false },
+  { name: 'Konfigurator cen', href: '/konfigurator-cen', current: false },
+]);
+
+// Get current URL from Inertia.js
+const { url } = usePage();
+
+// Set the current active item based on the URL
+const updateCurrentNavigation = () => {
+  // Clear all `current` flags first
+  navigation.value.forEach((item) => {
+    item.current = false;
+  });
+
+  // Find an exact match first
+  const exactMatch = navigation.value.find((item) => url === item.href);
+  if (exactMatch) {
+    exactMatch.current = true;
+    return;
+  }
+
+  // Fallback to startsWith match for other items
+  const startsWithMatch = navigation.value.find(
+      (item) => url.startsWith(item.href) && item.href !== "/"
+  );
+  if (startsWithMatch) {
+    startsWithMatch.current = true;
+  }
+};
+
+// Watch the URL and update navigation whenever it changes
+watchEffect(() => {
+  updateCurrentNavigation();
+});
+
 </script>

@@ -33,7 +33,8 @@ class InstallationCostController extends Controller
         $invoiceItems = [];
 
         // 1️⃣ Koszt paneli
-        $panelVariantPrice = PanelVariantPrice::where('model', $this->panelName($panelType))
+        $panelVariantPrice = PanelVariantPrice::with('panelModel') // eager load relacji
+            ->whereRelation('panelModel', 'name', $this->panelName($panelType)) // 🔄 filtr po nazwie modelu
             ->where('install_type', $installationType === 'string' ? 'string' : 'with_storage')
             ->whereRelation('variant', 'panel_count', $panelCount)
             ->first();
@@ -44,7 +45,7 @@ class InstallationCostController extends Controller
         $total += $panelTotal;
 
         $invoiceItems[] = [
-            'name' => "Panele $panelVariantPrice->model",
+            'name' => "Panele " . ($panelVariantPrice?->panelModel?->name ?? '-'), // 🔄 pobieramy z relacji
             'quantity' => $panelCount,
             'unit_price' => $panelPrice,
             'total' => $panelTotal,

@@ -1,6 +1,6 @@
 <template>
   <Navbar></Navbar>
-  <main class="min-h-screen bg-white p-6">
+  <main class="min-h-screen bg-gray-50 p-6">
     <CalculationForm v-if="authenticated" />
     <PasswordModal
         :authenticated="authenticated"

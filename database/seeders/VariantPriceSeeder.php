@@ -7,6 +7,7 @@ use App\Models\Variant;
 use App\Models\PanelVariantPrice;
 use App\Models\InverterVariantPrice;
 use App\Models\StorageVariantPrice;
+use App\Models\PanelModel;
 use League\Csv\Reader;
 
 class VariantPriceSeeder extends Seeder
@@ -15,8 +16,19 @@ class VariantPriceSeeder extends Seeder
     {
         $csv = Reader::createFromPath(database_path('seeders/cennik2.csv'), 'r');
         $csv->setHeaderOffset(0);
-        $headers = $csv->getHeader(); // get header row
+        $headers = $csv->getHeader();
         print_r($headers);
+
+        // ✅ Create panel models only once
+        $tongwei500 = PanelModel::firstOrCreate(
+            ['name' => 'Tongwei 500W'],
+            ['manufacturer' => 'Tongwei', 'power_watt' => 500]
+        );
+
+        $jasolar500 = PanelModel::firstOrCreate(
+            ['name' => 'JASOLAR 500W FB'],
+            ['manufacturer' => 'JA Solar', 'power_watt' => 500]
+        );
 
         foreach ($csv as $row) {
             $panelCount = (int) $row['liczba paneli'];
@@ -26,11 +38,11 @@ class VariantPriceSeeder extends Seeder
                 'panel_count' => $panelCount,
             ]);
 
-            // Ceny paneli
+            // ===== PANELS =====
             if (!empty($row['Z MAGAZYNAMI i tongwei 500W'])) {
                 PanelVariantPrice::create([
                     'variant_id' => $variant->id,
-                    'model' => 'Tongwei 500W',
+                    'panel_model_id' => $tongwei500->id,
                     'install_type' => 'with_storage',
                     'price_per_panel' => $row['Z MAGAZYNAMI i tongwei 500W'],
                 ]);
@@ -39,7 +51,7 @@ class VariantPriceSeeder extends Seeder
             if (!empty($row['STRING i tongwei 500W'])) {
                 PanelVariantPrice::create([
                     'variant_id' => $variant->id,
-                    'model' => 'Tongwei 500W',
+                    'panel_model_id' => $tongwei500->id,
                     'install_type' => 'string',
                     'price_per_panel' => $row['STRING i tongwei 500W'],
                 ]);
@@ -48,7 +60,7 @@ class VariantPriceSeeder extends Seeder
             if (!empty($row['Z MAGAZYNAMI i JASOLAR 500W FB'])) {
                 PanelVariantPrice::create([
                     'variant_id' => $variant->id,
-                    'model' => 'JASOLAR 500W FB',
+                    'panel_model_id' => $jasolar500->id,
                     'install_type' => 'with_storage',
                     'price_per_panel' => $row['Z MAGAZYNAMI i JASOLAR 500W FB'],
                 ]);
@@ -57,13 +69,13 @@ class VariantPriceSeeder extends Seeder
             if (!empty($row['STRING i JASOLAR 500W FB'])) {
                 PanelVariantPrice::create([
                     'variant_id' => $variant->id,
-                    'model' => 'JASOLAR 500W FB',
+                    'panel_model_id' => $jasolar500->id,
                     'install_type' => 'string',
                     'price_per_panel' => $row['STRING i JASOLAR 500W FB'],
                 ]);
             }
 
-            // Cena inwertera
+            // ===== INVERTER =====
             if (!empty($row['inwenter hybrydowy'])) {
                 InverterVariantPrice::create([
                     'variant_id' => $variant->id,
@@ -71,7 +83,7 @@ class VariantPriceSeeder extends Seeder
                 ]);
             }
 
-            // Ceny magazynów
+            // ===== STORAGE =====
             if (!empty($row['magazyn 5 kw'])) {
                 StorageVariantPrice::create([
                     'variant_id' => $variant->id,
@@ -96,6 +108,5 @@ class VariantPriceSeeder extends Seeder
                 ]);
             }
         }
-
     }
 }

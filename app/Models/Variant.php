@@ -16,9 +16,14 @@ class Variant extends Model
         return $this->hasMany(PanelVariantPrice::class);
     }
 
-    public function inverterPrices()
+//    public function inverterPrices()
+//    {
+//        return $this->hasMany(InverterVariantPrice::class);
+//    }
+
+    public function inverterPrice()
     {
-        return $this->hasMany(InverterVariantPrice::class);
+        return $this->hasOne(InverterVariantPrice::class);
     }
 
     public function storagePrices()

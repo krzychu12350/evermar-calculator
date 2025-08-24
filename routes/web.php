@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallationCostController;
+use App\Http\Controllers\PanelModelController;
 use App\Http\Controllers\PriceConfigurationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,5 +35,7 @@ Route::middleware(['check-access'])->group(function () {
     Route::get('/form', function (){
         return Inertia::render('PriceForm');
     });
+
+    Route::resource('panels', PanelModelController::class);
 });
 

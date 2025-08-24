@@ -1,6 +1,7 @@
 <template>
   <Navbar></Navbar>
   <main class="min-h-screen bg-gray-50 p-6">
+    <!-- slot here -->
     <CalculationForm v-if="authenticated" />
     <PasswordModal
         :authenticated="authenticated"
@@ -9,7 +10,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Navbar from "@/Components/Navbar.vue";
 import CalculationForm from "@/Components/CalculationForm.vue";
 import PasswordModal from "@/Components/PasswordModal.vue";

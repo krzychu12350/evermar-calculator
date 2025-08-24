@@ -16,7 +16,7 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Navbar from "@/Components/Navbar.vue";
 import PriceTable from "@/Components/PriceTable.vue";
 

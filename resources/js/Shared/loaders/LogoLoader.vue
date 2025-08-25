@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { defineProps, ref, onMounted } from "vue";
-import { useEventable } from "@/shared/utilities/eventBus";
+import { useEventable } from "@/Shared/utilities/eventBus";
 
 const { watchEvent } = useEventable();
 

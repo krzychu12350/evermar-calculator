@@ -118,7 +118,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, defineProps, defineEmits, onMounted } from "vue";
 import Pagination from "../pagination/Pagination.vue";
-import {useEventable} from "@/Shared/utilities/eventBus"; // Import event bus utility
+import { useEventable } from "@/Shared/utilities/eventBus"; // Import event bus utility
 
 const isCalendarView = ref(false);
 

@@ -62,7 +62,7 @@ const showNotification = (data: {
     title: data.title,
     message: data.message,
     type: data.type,
-    timeout: 1000,
+    timeout: data.timeout,
   });
 };
 

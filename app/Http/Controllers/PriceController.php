@@ -114,7 +114,7 @@ class PriceController extends Controller
             'prices.inverter' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-    //    dd($validated);
+     //   dd($validated);
 
         $prices = $validated['prices'];
 

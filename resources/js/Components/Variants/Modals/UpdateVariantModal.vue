@@ -191,12 +191,15 @@ const onSubmit = () => {
   router.put(route("variants.update", props.variant.id), payload, {
     onSuccess: () => {
       emit("hide-logo-loader");
-      emit('reload-variants');
-      emit("show-notification", {
-        title: "Sukces!",
-        message: "Wariant został zaktualizowany pomyślnie!",
-        type: "success"
-      });
+      // emit('reload-variants');
+        emit("show-notification", {
+          title: "Sukces!",
+          message: "Wariant został zaktualizowany pomyślnie!",
+          type: "success",
+          timeout: 5000
+        });
+
+
       closeModal();
     },
     onError: (errors) => {

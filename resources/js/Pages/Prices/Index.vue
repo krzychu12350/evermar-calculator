@@ -216,6 +216,17 @@ onMounted(() => {
   if (variantIdFromUrl && !isNaN(Number(variantIdFromUrl))) {
     selectedVariantId.value = Number(variantIdFromUrl);
     console.log( selectedVariantId.value)
+
+
+      // ✅ Emit info notification if param exists
+      emit("show-notification", {
+        title: "Uwaga!",
+        message: "Zaktualizuj ceny dla tego wariantu",
+        type: "info",
+        timeout: 8000,
+      });
+
+
   }
   // else if (variants.length) {
   //   // Fallback: select last variant

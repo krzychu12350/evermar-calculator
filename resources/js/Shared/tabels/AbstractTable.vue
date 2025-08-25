@@ -101,6 +101,7 @@
 
           <!-- Pagination Component -->
           <Pagination
+              v-if="pagination"
             :pagination="pagination"
             :currentPage="currentPage"
             :totalItems="totalItems"
@@ -132,7 +133,7 @@ interface Column {
 interface Props {
   data: Array<Record<string, any>>;
   columns: Array<Column>;
-  pagination: Object;
+  pagination?: Object;
   itemsPerPageOptions?: number[];
   title?: string;
   description?: string;

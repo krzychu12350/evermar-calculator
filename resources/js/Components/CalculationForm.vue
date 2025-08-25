@@ -1,6 +1,8 @@
 <script setup>
 import {ref, watch, computed} from 'vue'
 import {useForm} from '@inertiajs/vue3'
+import {useEventable} from "@/Shared/utilities/eventBus.ts";
+const {emit } = useEventable();
 
 const installationForm = useForm({
   installationType: 'string',
@@ -41,21 +43,59 @@ const totalWithTax = computed(() => {
   const multiplier = installationForm.taxType === 'private' ? 1.08 : 1.23;
   return totalFromBackend.value * multiplier;
 });
-
 const handleSubmit = () => {
+  console.log(installationForm.data());
   installationForm.post('/installation/calculate', {
-    preserveScroll: true,      // Keep scroll position
-    preserveState: true,       // Keep form state
-    replace: false,             // Replace current history instead of pushing new URL
+    preserveScroll: true,
+    preserveState: true,
+    replace: false,
     onSuccess: (page) => {
       totalFromBackend.value = page.props.total;
       invoiceItemsFromBackend.value = page.props.invoiceItems || [];
-     summaryCost.value = page.props.summary || {};
-      // Scroll to top
-      window.scrollTo({top: 0, behavior: 'smooth'});
-      // Reset the form after success
-   //   installationForm.reset();
-    },
+      summaryCost.value = page.props.summary || {};
+
+      // Compute table-ready fields
+      const taxMultiplier = installationForm.taxType === 'private' ? 1.08 : 1.23;
+      const tableData = invoiceItemsFromBackend.value.map(item => ({
+        ...item,
+        vat: installationForm.taxType === 'private' ? '8%' : '23%',
+        price_with_vat: Number(item.unit_price) * taxMultiplier,
+        total_with_vat: Number(item.total) * taxMultiplier,
+      }));
+
+
+      // Trigger step change after table updated
+      setTimeout(() => {
+        emit('go-to-next-step');
+      }, 100); // slightly delay to ensure reactivity
+
+      setTimeout(() => {
+
+        emit('updateInvoice', {
+          data: tableData,
+          columns: [
+            { title: 'Pozycja', key: 'name' },
+            { title: 'Ilość', key: 'quantity' },
+            { title: 'Cena netto', key: 'unit_price' },
+            { title: 'VAT', key: 'vat' },
+            { title: 'Cena brutto', key: 'price_with_vat' },
+            { title: 'Suma netto', key: 'total' },
+            { title: 'Suma brutto', key: 'total_with_vat' },
+          ],
+          title: "Faktura szczegółowa",
+          description: "Szczegóły pozycji instalacji",
+        });
+
+          emit('updateInvoiceSummary', {
+            summaryCost: summaryCost.value,
+            taxType: installationForm.taxType
+          });
+
+      }, 500); // slightly delay to ensure reactivity
+
+
+    }
+
   });
 };
 
@@ -149,63 +189,63 @@ const toggleMargin = () => {
 </script>
 
 <template>
-  <div v-if="totalFromBackend !== 0" ref="resultsDiv" class="mt-4 mb-4 p-4 bg-gray-100 rounded">
-    <!-- Total Cost -->
-    <div class="text-center mb-4">
-      <h3 class="text-lg font-semibold mb-2 text-gray-700">Całkowity koszt instalacji:</h3>
-      <vue3-autocounter
-          class="text-2xl font-bold text-green-600"
-          ref="counter"
-          :startAmount="0"
-          :endAmount="totalWithTax"
-          :duration="1"
-          suffix=" zł"
-          separator=""
-          decimalSeparator=","
-          :decimals="2"
-          :autoinit="true"
-      />
-    </div>
+<!--  <div v-if="totalFromBackend !== 0" ref="resultsDiv" class="mt-4 mb-4 p-4 bg-gray-100 rounded">-->
+<!--    &lt;!&ndash; Total Cost &ndash;&gt;-->
+<!--    <div class="text-center mb-4">-->
+<!--      <h3 class="text-lg font-semibold mb-2 text-gray-700">Całkowity koszt instalacji:</h3>-->
+<!--      <vue3-autocounter-->
+<!--          class="text-2xl font-bold text-green-600"-->
+<!--          ref="counter"-->
+<!--          :startAmount="0"-->
+<!--          :endAmount="totalWithTax"-->
+<!--          :duration="1"-->
+<!--          suffix=" zł"-->
+<!--          separator=""-->
+<!--          decimalSeparator=","-->
+<!--          :decimals="2"-->
+<!--          :autoinit="true"-->
+<!--      />-->
+<!--    </div>-->
 
-    <!-- Detailed Invoice Table -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border border-gray-300 rounded">
-        <thead class="bg-gray-200">
-        <tr>
-          <th class="px-4 py-2 border-b">Pozycja</th>
-          <th class="px-4 py-2 border-b">Ilość</th>
-          <th class="px-4 py-2 border-b">Cena netto</th>
-          <th class="px-4 py-2 border-b">VAT</th>
-          <th class="px-4 py-2 border-b">Cena brutto</th>
-          <th class="px-4 py-2 border-b">Suma netto</th>
-          <th class="px-4 py-2 border-b">Suma brutto</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(item, index) in invoiceItemsFromBackend" :key="index" class="hover:bg-gray-50">
-          <td class="px-4 py-2 border-b">{{ item.name }}</td>
-          <td class="px-4 py-2 border-b">{{ item.quantity }}</td>
-          <td class="px-4 py-2 border-b">{{ formatPrice(item.unit_price) }}</td>
-          <td class="px-4 py-2 border-b"> {{ installationForm.taxType === 'private' ? '8%' : '23%' }}</td>
-          <td class="px-4 py-2 border-b">
-            {{ formatPrice(item.unit_price * (installationForm.taxType === 'private' ? 1.08 : 1.23)) }}
-          </td>
-          <td class="px-4 py-2 border-b font-semibold">{{ formatPrice(item.total) }}</td>
-          <td class="px-4 py-2 border-b font-semibold">
-            {{ formatPrice(item.total * (installationForm.taxType === 'private' ? 1.08 : 1.23)) }}
-          </td>
-        </tr>
-        </tbody>
-        <tfoot>
-        <tr class="bg-gray-100 font-bold">
-          <td colspan="5" class="px-4 py-2 border-t text-right">Razem:</td>
-          <td class="px-4 py-2 border-t">{{ formatPrice(totalFromBackend) }}</td>
-          <td class="px-4 py-2 border-t">{{ formatPrice(totalWithTax) }}</td>
-        </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
+<!--    &lt;!&ndash; Detailed Invoice Table &ndash;&gt;-->
+<!--    <div class="overflow-x-auto">-->
+<!--      <table class="w-full text-left border border-gray-300 rounded">-->
+<!--        <thead class="bg-gray-200">-->
+<!--        <tr>-->
+<!--          <th class="px-4 py-2 border-b">Pozycja</th>-->
+<!--          <th class="px-4 py-2 border-b">Ilość</th>-->
+<!--          <th class="px-4 py-2 border-b">Cena netto</th>-->
+<!--          <th class="px-4 py-2 border-b">VAT</th>-->
+<!--          <th class="px-4 py-2 border-b">Cena brutto</th>-->
+<!--          <th class="px-4 py-2 border-b">Suma netto</th>-->
+<!--          <th class="px-4 py-2 border-b">Suma brutto</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr v-for="(item, index) in invoiceItemsFromBackend" :key="index" class="hover:bg-gray-50">-->
+<!--          <td class="px-4 py-2 border-b">{{ item.name }}</td>-->
+<!--          <td class="px-4 py-2 border-b">{{ item.quantity }}</td>-->
+<!--          <td class="px-4 py-2 border-b">{{ formatPrice(item.unit_price) }}</td>-->
+<!--          <td class="px-4 py-2 border-b"> {{ installationForm.taxType === 'private' ? '8%' : '23%' }}</td>-->
+<!--          <td class="px-4 py-2 border-b">-->
+<!--            {{ formatPrice(item.unit_price * (installationForm.taxType === 'private' ? 1.08 : 1.23)) }}-->
+<!--          </td>-->
+<!--          <td class="px-4 py-2 border-b font-semibold">{{ formatPrice(item.total) }}</td>-->
+<!--          <td class="px-4 py-2 border-b font-semibold">-->
+<!--            {{ formatPrice(item.total * (installationForm.taxType === 'private' ? 1.08 : 1.23)) }}-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--        <tfoot>-->
+<!--        <tr class="bg-gray-100 font-bold">-->
+<!--          <td colspan="5" class="px-4 py-2 border-t text-right">Razem:</td>-->
+<!--          <td class="px-4 py-2 border-t">{{ formatPrice(totalFromBackend) }}</td>-->
+<!--          <td class="px-4 py-2 border-t">{{ formatPrice(totalWithTax) }}</td>-->
+<!--        </tr>-->
+<!--        </tfoot>-->
+<!--      </table>-->
+<!--    </div>-->
+<!--  </div>-->
 
 
   <!--  <pre>-->
@@ -213,9 +253,8 @@ const toggleMargin = () => {
   <!--    {{installationForm}}-->
   <!--  </pre>-->
 
-  <div class="installation-form max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+  <div class="installation-form max-w-lg mx-auto bg-white py-4">
     <h2 class="text-2xl font-semibold mb-4 text-gray-800">Oblicz koszt instalacji</h2>
-
     <form @submit.prevent="handleSubmit">
       <!-- Rodzaj instalacji -->
       <div class="mb-4">
@@ -315,22 +354,22 @@ const toggleMargin = () => {
       </div>
 
 
-      <div v-if="installationForm.installationType === 'string'" class="mb-4 space-y-4">
-        <!-- Storage toggle -->
-        <div class="flex items-center space-x-2">
-          <button
-              type="button"
-              @click="showStorageField = !showStorageField"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
-          >
-            {{ showStorageField ? '−' : '+' }}
-          </button>
-          <span class="text-gray-700 font-medium">Dodaj magazyn</span>
-        </div>
-      </div>
+<!--      <div v-if="installationForm.installationType === 'string'" class="mb-4 space-y-4">-->
+<!--        &lt;!&ndash; Storage toggle &ndash;&gt;-->
+<!--        <div class="flex items-center space-x-2">-->
+<!--          <button-->
+<!--              type="button"-->
+<!--              @click="showStorageField = !showStorageField"-->
+<!--              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"-->
+<!--          >-->
+<!--            {{ showStorageField ? '−' : '+' }}-->
+<!--          </button>-->
+<!--          <span class="text-gray-700 font-medium">Dodaj magazyn</span>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <!-- Storage selection -->
-      <div v-if="showStorageField || installationForm.installationType === 'storage'" class="mb-4">
+      <div v-if="installationForm.installationType === 'storage'" class="mb-4">
         <label class="block text-gray-700 font-medium mb-1">Wybierz magazyn</label>
         <select
             v-model.number="installationForm.storageCapacity"

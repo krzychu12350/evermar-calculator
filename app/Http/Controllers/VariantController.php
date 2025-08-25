@@ -8,7 +8,9 @@ use App\Models\PanelVariantPrice;
 use App\Models\InverterVariantPrice;
 use App\Models\StorageVariantPrice;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class VariantController extends Controller
 {
@@ -185,47 +187,86 @@ class VariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, Variant $variant)
     {
-        // Validate only the fields that can be updated
         $request->validate([
             'panel_models' => 'required|array',
             'panel_models.*' => 'required|exists:panel_models,id',
             'install_types' => 'required|array',
             'install_types.*' => 'required|in:string,with_storage',
             'storage_variants' => 'required|array',
-            'storage_variants.*' => 'required|integer|min:0', // no table check
+            'storage_variants.*' => 'required|integer|min:0',
         ]);
 
-        // Do NOT update panel_count anymore
-        // $variant->update(['panel_count' => $request->panel_count]); <-- removed
+        DB::transaction(function () use ($request, $variant) {
 
-        // Replace panel prices
-        $variant->panelPrices()->delete();
-        foreach ($request->panel_models as $panelId) {
-            foreach ($request->install_types as $installType) {
-                PanelVariantPrice::create([
-                    'variant_id' => $variant->id,
-                    'panel_model_id' => $panelId,
-                    'install_type' => $installType,
-                    'price_per_panel' => 0, // default or adjust if price is sent from frontend
-                ]);
+            // --- PANEL PRICES ---
+
+            // Build a set of keys from request: panel_model_id + install_type
+            $requestedPanelKeys = [];
+            foreach ($request->panel_models as $panelId) {
+                foreach ($request->install_types as $installType) {
+                    $requestedPanelKeys[] = ['panel_model_id' => $panelId, 'install_type' => $installType];
+                }
             }
-        }
 
-        // Replace storage prices
-        $variant->storagePrices()->delete();
-        foreach ($request->storage_variants as $capacity) {
-            StorageVariantPrice::create([
-                'variant_id' => $variant->id,
-                'capacity_kwh' => $capacity, // use the actual column in your table
-                'price' => 0, // default price
-            ]);
-        }
+            // Delete panelPrices not in request
+            $variant->panelPrices()
+                ->whereNot(function ($query) use ($requestedPanelKeys) {
+                    foreach ($requestedPanelKeys as $key) {
+                        $query->orWhere(function ($q) use ($key) {
+                            $q->where('panel_model_id', $key['panel_model_id'])
+                                ->where('install_type', $key['install_type']);
+                        });
+                    }
+                })->delete();
 
-        return redirect()->back()->with('success', 'Wariant został zaktualizowany.');
+            // Update or create panelPrices from request, preserving existing prices
+            foreach ($requestedPanelKeys as $key) {
+                $panelPrice = $variant->panelPrices()
+                    ->where('panel_model_id', $key['panel_model_id'])
+                    ->where('install_type', $key['install_type'])
+                    ->first();
+
+                if (!$panelPrice) {
+                    // Create new record with price 0
+                    $variant->panelPrices()->create([
+                        'panel_model_id' => $key['panel_model_id'],
+                        'install_type' => $key['install_type'],
+                        'price_per_panel' => 0,
+                    ]);
+                }
+                // Existing records remain unchanged
+            }
+
+            // --- STORAGE PRICES ---
+
+            // Delete storagePrices not in request
+            $variant->storagePrices()
+                ->whereNotIn('capacity_kwh', $request->storage_variants)
+                ->delete();
+
+            // Update or create storagePrices, preserving existing prices
+            foreach ($request->storage_variants as $capacity) {
+                $storagePrice = $variant->storagePrices()
+                    ->where('capacity_kwh', $capacity)
+                    ->first();
+
+                if (!$storagePrice) {
+                    $variant->storagePrices()->create([
+                        'capacity_kwh' => $capacity,
+                        'price' => 0,
+                    ]);
+                }
+                // Existing records remain unchanged
+            }
+        });
+
+       // return redirect()->back()->with('success', 'Wariant został zaktualizowany.');
+
+        return to_route('prices.index', ['selected_variant_id' => $variant->id]);
     }
-
 
 
 

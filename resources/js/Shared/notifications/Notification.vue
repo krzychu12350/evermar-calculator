@@ -1,11 +1,11 @@
 <template>
   <transition
-    enter-active-class="transform ease-out duration-300 transition"
-    enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-    enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
-    leave-active-class="transition ease-in duration-100"
-    leave-from-class="opacity-100"
-    leave-to-class="opacity-0"
+      enter-active-class="transform ease-out duration-300 transition"
+      enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+      enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
+      leave-active-class="transition ease-in duration-300"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
   >
     <div
       v-if="visible"
@@ -38,7 +38,6 @@
     </div>
   </transition>
 </template>
-
 <script setup lang="ts">
 import { ref, computed, onMounted, defineEmits } from "vue";
 import {
@@ -47,7 +46,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 
-const emit = defineEmits("hide-notification");
+const emit = defineEmits(["hide-notification"]);
 
 const props = defineProps({
   title: String,
@@ -55,13 +54,22 @@ const props = defineProps({
   type: String,
   timeout: {
     type: Number,
-    default: 5000, // Default timeout in milliseconds
+    default: 10000, // 10 seconds
   },
 });
 
 const visible = ref(true);
+let timeoutId: number;
 
-// Dynamically select the notification icon based on the type
+const hide = () => {
+  visible.value = false;
+  emit("hide-notification");
+};
+
+onMounted(() => {
+  timeoutId = window.setTimeout(() => hide(),props.timeout);
+});
+
 const icon = computed(() => {
   switch (props.type) {
     case "error":
@@ -75,35 +83,16 @@ const icon = computed(() => {
   }
 });
 
-// Compute the notification class based on type
 const notificationClass = computed(() => {
   switch (props.type) {
     case "error":
       return "bg-red-50 border-l-4 border-red-400 text-red-800";
     case "info":
-      return "bg-blue-50 border-l-4 border-blue-400 text-blue-800";
+      return "bg-gray-50 border-l-4 border-gray-400 text-gray-800";
     case "warning":
       return "bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800";
     default:
       return "bg-white border-l-4 border-green-400 text-green-800";
   }
 });
-
-// Hide the notification after the timeout
-onMounted(() => {
-  setTimeout(() => {
-    hide();
-  }, props.timeout);
-});
-
-// Hide notification function
-const hide = () => {
-  visible.value = false;
-  // Notify the parent to remove this notification
-  emit("hide-notification");
-};
 </script>
-
-<style scoped>
-/* Optional additional styling */
-</style>

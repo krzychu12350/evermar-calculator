@@ -140,6 +140,7 @@ const onSubmit = handleSubmit(async (values) => {
     onSuccess: () => {
       emiter("confirm", values); // send updated panel back
       emit("hide-logo-loader");
+      emit("reload-panels");
       emit("show-notification", {
         title: "Sukces!",
         message: "Model panelu został zaktualizowany pomyślnie!",

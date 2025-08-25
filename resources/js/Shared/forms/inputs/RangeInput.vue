@@ -20,9 +20,9 @@
           :max="max"
       />
     </div>
-    <div class="text-sm text-gray-500">
-      Zakres: {{ internalValue.from }}{{ unit }} - {{ internalValue.to }}{{ unit }}
-    </div>
+<!--    <div class="text-sm text-gray-500">-->
+<!--      Zakres: {{ internalValue.from }}{{ unit }} - {{ internalValue.to }}{{ unit }}-->
+<!--    </div>-->
   </div>
 </template>
 

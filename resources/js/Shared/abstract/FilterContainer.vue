@@ -392,7 +392,6 @@
                     <div v-else-if="section.type === 'range'" class="space-y-6">
                       <RangeInput
                           v-model:value="section.value"
-
                           :min="section.min"
                           :max="section.max"
                           :unit="section.unit"

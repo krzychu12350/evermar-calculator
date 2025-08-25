@@ -123,6 +123,7 @@ const onSubmit = handleSubmit(async (values) => {
       resetForm();
       emiter("confirm", values);
       emit("hide-logo-loader");
+      emit("reload-panels");
       emit("show-notification", {
         title: "Sukces!",
         message: "Model panelu został dodany pomyślnie!",

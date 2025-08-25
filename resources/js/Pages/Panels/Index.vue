@@ -4,6 +4,7 @@
         class="sm:p-12"
         title="Modele paneli"
         :filters="panelFilters"
+        :is_mode_toogling="false"
         @apply-filters="handleApplyFilters"
     >
       <template #actions>
@@ -279,6 +280,7 @@ onMounted(() => {
   watchEvent("page-changed", updatePage);
   watchEvent("items-per-page-changed", updateItemsPerPage);
   watchEvent("sorting-changed", updateSorting);
+  watchEvent("reload-panels", reloadPanelsData);
 });
 
 const isAddPanelModalVisible = ref(false);

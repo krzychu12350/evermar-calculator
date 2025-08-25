@@ -1,8 +1,8 @@
 <template>
   <ConfirmationModal
       :isOpen="isOpen"
-      title="Usuń panel?"
-      message="Czy na pewno chcesz usunąć ten panel? Tej operacji nie można cofnąć."
+      title="Usuń wariant?"
+      message="Czy na pewno chcesz usunąć ten wariant? Tej operacji nie można cofnąć."
       confirmText="Usuń"
       cancelText="Anuluj"
       @close="closeModal"
@@ -17,23 +17,22 @@ import { route } from "ziggy-js";
 
 const props = defineProps<{
   isOpen: boolean;
-  panelId: number | null;
+  variantId: number | null;
 }>();
 
 const emit = defineEmits<{
   (e: "close"): void;
-  (e: "deleted", panelId: number): void;
+  (e: "deleted", variantId: number): void;
 }>();
 
 const closeModal = () => emit("close");
 
 const confirmDelete = () => {
-  if (!props.panelId) return;
+  if (!props.variantId) return;
 
-  router.delete(route("panels.destroy", { panel: props.panelId }), {
+  router.delete(route("variants.destroy", { variant: props.variantId }), {
     onSuccess: () => {
-      emit("deleted", props.panelId);
-      emit("reload-panels");
+      emit("deleted", props.variantId);
       closeModal();
     },
   });

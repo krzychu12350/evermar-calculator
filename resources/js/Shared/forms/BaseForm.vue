@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import CustomButton from "@/presentation/shared/forms/buttons/CustomButton.vue"; // Fixed missing quote
+import CustomButton from "@/Shared/forms/buttons/CustomButton.vue"; // Fixed missing quote
 
 const props = defineProps({
   title: String,

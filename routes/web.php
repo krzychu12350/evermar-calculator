@@ -27,7 +27,11 @@ Route::middleware(['check-access'])->group(function () {
 
 //    Route::get('/konfigurator-cen', [PriceConfigurationController::class, 'index']);
     Route::get('/konfigurator-cen', [PriceController::class, 'index'])
-        ->name('price.index');
+        ->name('prices.index');
+    Route::resource('prices', PriceController::class)->except(['index', 'update']);
+    Route::put('/prices/{variant}', [PriceController::class, 'update'])
+        ->name('prices.update');
+
 
     Route::get('/panels', function (){
         return Inertia::render('Panels');

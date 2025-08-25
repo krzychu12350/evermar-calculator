@@ -167,7 +167,8 @@ class VariantController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Wariant został dodany.');
+//        return redirect()->back()->with('success', 'Wariant został dodany.');
+        return to_route('prices.index', ['selected_variant_id' => $variant->id]);
     }
 
 

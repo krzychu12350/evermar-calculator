@@ -188,7 +188,12 @@ const onSubmit = (e: Event) => {
   emit("show-logo-loader");
   // Send to backend using Inertia
   router.post(route("variants.store"), payload, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+
+      // Redirect to Prices index
+      emit('select-variant');
+
+      console.log(data)
       console.log("Variant successfully saved!");
       emit("hide-logo-loader");
       emit('reload-variants');
@@ -205,6 +210,7 @@ const onSubmit = (e: Event) => {
       selectedPanels.value = [];
       selectedInstallTypes.value = [];
       selectedStorages.value = [];
+
     },
     onError: (errors) => {
       console.error("Backend validation errors:", errors);
@@ -212,6 +218,10 @@ const onSubmit = (e: Event) => {
   });
 };
 
+function goToVariantPriceConfiguratorPage()
+{
+  router.post(route("prices.index"))
+}
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

@@ -33,7 +33,7 @@ if (tableColumns.value.length === 0) {
 }
 
 onMounted(()=> {
-  emit('show-logo-loader');
+  //emit('show-logo-loader');
   watchEvent('updateInvoice',  (payload) => {
 
     // Ensure reactivity triggers
@@ -45,9 +45,9 @@ onMounted(()=> {
     tableDescription.value = payload.description || 'Szczegóły pozycji instalacji';
     console.log('Invoice updated:', tableData.value);
 
-    setTimeout(()=> {
-      emit('hide-logo-loader');
-    },1000);
+    // setTimeout(()=> {
+    //   emit('hide-logo-loader');
+    // },1000);
 
   });
 })

@@ -67,7 +67,7 @@ const handleSubmit = () => {
       // Trigger step change after table updated
       setTimeout(() => {
         emit('go-to-next-step');
-      }, 100); // slightly delay to ensure reactivity
+      }, 500); // slightly delay to ensure reactivity
 
       setTimeout(() => {
 
@@ -318,7 +318,7 @@ const toggleMargin = () => {
           <button
               type="button"
               @click="showInverterField = !showInverterField"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
+              class="flex items-center justify-center w-8 h-8 text-white bg-green-500 rounded hover:bg-green-400 cursor-pointer"
           >
             {{ showInverterField ? '−' : '+' }}
           </button>
@@ -360,7 +360,7 @@ const toggleMargin = () => {
 <!--          <button-->
 <!--              type="button"-->
 <!--              @click="showStorageField = !showStorageField"-->
-<!--              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"-->
+<!--              class="flex items-center justify-center w-8 h-8 text-white bg-green-500 rounded hover:bg-green-400 cursor-pointer"-->
 <!--          >-->
 <!--            {{ showStorageField ? '−' : '+' }}-->
 <!--          </button>-->
@@ -415,7 +415,7 @@ const toggleMargin = () => {
           <button
               type="button"
               @click="toggleMargin"
-              class="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded hover:bg-green-700 cursor-pointer"
+              class="flex items-center justify-center w-8 h-8 text-white bg-green-500 rounded hover:bg-green-400 cursor-pointer"
           >
             {{ showMarginField ? '−' : '+' }}
           </button>
@@ -467,7 +467,7 @@ const toggleMargin = () => {
         <button
             type="button"
             @click="handleReset"
-            class="flex-1 cursor-pointer bg-gray-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-600"
+            class="flex-1 cursor-pointer bg-gray-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-400"
         >
           Resetuj formularz
         </button>
@@ -475,7 +475,7 @@ const toggleMargin = () => {
         <!-- Submit button -->
         <button
             type="submit"
-            class="flex-1 cursor-pointer bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700"
+            class="flex-1 cursor-pointer bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-400"
         >
           Oblicz koszt
         </button>

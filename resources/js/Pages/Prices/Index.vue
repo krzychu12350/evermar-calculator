@@ -1,6 +1,6 @@
 <template>
   <MainLayout>
-    <div class="p-6 space-y-6">
+    <div class="p-6 space-y-6 bg-white rounded-lg shadow-lg">
       <h1 class="text-2xl font-semibold text-gray-900">Ustaw ceny wariantu</h1>
 
       <!-- Variant Select -->

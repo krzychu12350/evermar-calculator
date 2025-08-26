@@ -9,3 +9,20 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Force Tailwind to use legacy color format for html2canvas compatibility */
+@layer base {
+    :root {
+        --tw-color-scheme: light;
+        color-scheme: light;
+    }
+
+    /* Tailwind sometimes outputs oklch(), we replace with safe RGB */
+    /* global.css or component <style> */
+    .force-rgb * {
+        color: rgb(31, 41, 55) !important; /* gray-800 */
+        background-color: #ffffff !important; /* white */
+        border-color: #e5e7eb !important; /* gray-200 */
+    }
+
+}

@@ -4,8 +4,18 @@
       <div class="flex justify-between h-20">
         <div class="flex px-2 lg:px-0">
           <div class="flex-shrink-0 flex items-center">
-            <img class="block lg:hidden h-16 w-auto" src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png" alt="Workflow" />
-            <img class="hidden lg:block h-20 w-auto" src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png" alt="Workflow" />
+            <Link :href="route('home')">
+              <img
+                  class="block lg:hidden h-16 w-auto"
+                  src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png"
+                  alt="Evermar logo"
+              />
+              <img
+                  class="hidden lg:block h-20 w-auto"
+                  src="https://evermar.net/wp-content/uploads/2025/02/cropped-Evermar_color.png"
+                  alt="Evermar logo"
+              />
+            </Link>
           </div>
           <div class="hidden lg:ml-6 lg:flex lg:items-center lg:space-x-8">
             <!-- Current: "border-green-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
@@ -136,6 +146,7 @@ import { BellIcon, Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import {  ref, watchEffect } from "vue";
 
 import { usePage, Link } from "@inertiajs/vue3";
+import {route} from "ziggy-js";
 
 
 const navigation = ref([

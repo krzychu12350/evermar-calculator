@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {ref, nextTick, onMounted} from 'vue';
 import AbstractTable from "@/Shared/tabels/AbstractTable.vue";
-import { useEventable } from '@/Shared/utilities/eventBus.ts';
+import {useEventable} from "@/Shared/utilities/eventBus";
 
 // Table reactive state
 const tableData = ref([]);
 const tableColumns = ref([]);
-const tableTitle = ref('Faktura szczegółowa');
+const tableTitle = ref('Oferta szczegółowa');
 const tableDescription = ref('Szczegóły pozycji instalacji');
 
 // Helper for formatting PLN prices
@@ -16,7 +16,7 @@ const formatPrice = (value: number) => {
 };
 
 // Listen for invoice updates
-const { watchEvent } = useEventable();
+const { emit, watchEvent } = useEventable();
 
 
 // Default columns if none provided
@@ -33,7 +33,9 @@ if (tableColumns.value.length === 0) {
 }
 
 onMounted(()=> {
+  emit('show-logo-loader');
   watchEvent('updateInvoice',  (payload) => {
+
     // Ensure reactivity triggers
     nextTick();
     tableData.value = payload.data || [];
@@ -42,6 +44,11 @@ onMounted(()=> {
     tableTitle.value = payload.title || 'Faktura szczegółowa';
     tableDescription.value = payload.description || 'Szczegóły pozycji instalacji';
     console.log('Invoice updated:', tableData.value);
+
+    setTimeout(()=> {
+      emit('hide-logo-loader');
+    },1000);
+
   });
 })
 </script>

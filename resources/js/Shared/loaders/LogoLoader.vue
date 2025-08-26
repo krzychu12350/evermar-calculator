@@ -4,8 +4,12 @@
     class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50"
   >
     <div class="flex flex-col justify-center items-center text-center animate-fade-in">
-      <img :src="logo" :alt="altText" class="w-90 animate-pulse" />
-      <p v-if="loadingText" class="mt-4 text-gray-700 text-lg font-medium animate-pulse">
+      <img
+          :src="logo"
+          :alt="altText"
+          class="w-64 sm:w-40 md:w-56 lg:w-72 xl:w-90 max-w-full h-auto animate-pulse object-contain"
+      />
+      <p v-if="loadingText" class="mt-4 text-gray-700 text-lg font-small animate-pulse">
         {{ loadingText }}
       </p>
     </div>

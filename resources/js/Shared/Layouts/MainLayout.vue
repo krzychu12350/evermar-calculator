@@ -1,7 +1,7 @@
 <template>
   <navbar />
 
-  <main class="min-h-screen bg-gray-50 sm:p-6">
+  <main class="min-h-screen bg-gray-50 sm:p-12 rounded-lg shadow-lg">
     <!-- Default slot for page-specific content -->
     <slot />
   </main>

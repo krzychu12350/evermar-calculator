@@ -82,7 +82,7 @@ const handleSubmit = () => {
             { title: 'Suma netto', key: 'total' },
             { title: 'Suma brutto', key: 'total_with_vat' },
           ],
-          title: "Faktura szczegółowa",
+          title: "Oferta szczegółowa",
           description: "Szczegóły pozycji instalacji",
         });
 

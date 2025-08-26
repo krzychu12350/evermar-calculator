@@ -10,7 +10,7 @@
 <!--  </main>-->
   <MainLayout>
     <CalculatorContainer
-    title="Kalkulator instalacji fotowoltaicznej"
+    title="Kalkulator instalacji"
     ></CalculatorContainer>
 
 <!--    <div class="flex">-->
@@ -26,12 +26,12 @@
 
 <script setup lang="ts">
 import Navbar from "@/Components/Navbar.vue";
-import CalculationForm from "@/Components/CalculationForm.vue";
+import CalculationForm from "@/Components/Calculations/CalculationForm.vue";
 import PasswordModal from "@/Components/PasswordModal.vue";
-import CalculatorContainer from "@/Components/CalculatorContainer.vue";
+import CalculatorContainer from "@/Components/Calculations/CalculatorContainer.vue";
 import { ref } from "vue";
 import MainLayout from "@/Shared/Layouts/MainLayout.vue";
-import InvoiceTable from "@/Components/InvoiceTable.vue";
+import InvoiceTable from "@/Components/Calculations/Invoice/InvoiceTable.vue";
 
 const authenticated = ref(true);
 const showInvoiceTable = ref(false);

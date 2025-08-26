@@ -1,15 +1,19 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <div class="rounded-lg shadow">
-      <div class="bg-white py-6 px-4 sm:p-6 rounded-lg">
+    <div class="">
+<!--      <div class="rounded-lg shadow">-->
+      <div class="bg-white">
         <h2 class="text-lg leading-6 font-medium text-gray-900">{{ title }}</h2>
         <p class="mt-1 text-sm text-gray-500">{{ description }}</p>
         <div class="mt-6 grid grid-cols-1 gap-6">
           <slot></slot>
         </div>
         <!-- Slot for custom form fields -->
+        <slot name="footer"></slot>
       </div>
-      <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+
+      <!-- Conditionally render the submit button -->
+      <div v-if="submitLabel" class="text-right pt-6">
         <CustomButton :label="submitLabel" type="submit" />
       </div>
     </div>
@@ -18,20 +22,18 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import CustomButton from "@/Shared/forms/buttons/CustomButton.vue"; // Fixed missing quote
+import CustomButton from "@/Shared/forms/buttons/CustomButton.vue";
 
 const props = defineProps({
   title: String,
   description: String,
-  submitLabel: String,
+  submitLabel: { type: String, default: null }, // Nullable
 });
 
 const emit = defineEmits();
 
 // Handle form submission
 const onSubmit = () => {
-  // Emit any necessary updates to parent component if needed
-  // For example, to notify the parent that the form has been submitted
   // emit("submit");
 };
 </script>
